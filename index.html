@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Experiencia Hogar Protegido Santander</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            /* Paleta Santander */
+            --rojo-santander: #EC0000;
+            --rojo-oscuro: #C71F17;
+            --beige: #FBF1EA;
+            --texto-claro: #FDFDFD;
+
+            /* UI tokens */
+            --radio-card: 22px;
+            --sombra-card: 0 18px 40px rgba(0, 0, 0, 0.45);
+            --fondo-app: linear-gradient(to bottom, #ffffff 0%, #f7f7f7 50%, #eeeeee 100%);
+            --borde-suave: 1px solid rgba(255, 255, 255, 0.06);
+
+            --duracion-transicion: 180ms;
+            --easing: cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #000;
+            background-image: var(--fondo-app);
+            color: var(--texto-claro);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --------------------------
+       CÁMARA DE FONDO
+    ---------------------------*/
+        #camera {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            filter: brightness(0.92);
+            z-index: 0;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at top, rgba(236, 0, 0, 0.35), transparent 55%),
+                linear-gradient(to top, rgba(0, 0, 0, 0.78), transparent 45%);
+            pointer-events: none;
+            display: none;
+            z-index: 1;
+        }
+
+        /* --------------------------
+       CONTENEDORES PRINCIPALES
+    ---------------------------*/
+        .welcome-screen,
+        .ui-layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .welcome-screen {
+            z-index: 2;
+        }
+
+        .ui-layer {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            pointer-events: none;
+            padding: 16px;
+            z-index: 2;
+        }
+
+        /* --------------------------
+       TARJETA DE BIENVENIDA
+    ---------------------------*/
+        .welcome-card {
+            width: 100%;
+            max-width: 330px;
+            background: radial-gradient(circle at top left, #252525 0, #111 45%, #050505 100%);
+            border-radius: var(--radio-card);
+            padding: 24px 20px 20px;
+            box-shadow: var(--sombra-card);
+            color: var(--texto-claro);
+            text-align: center;
+            border: var(--borde-suave);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background:
+                linear-gradient(135deg, rgba(236, 0, 0, 0.4), transparent 35%, transparent 65%, rgba(236, 0, 0, 0.35));
+            opacity: 0.7;
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        .welcome-card>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --------------------------
+       IMAGEN DE BIENVENIDA
+    ---------------------------*/
+        .welcome-image {
+  width: 100%;
+  /* QUITA la altura fija */
+  /* height: 140px; */
+  border-radius: 18px;
+  overflow: hidden;      /* esto sí lo dejamos para las esquinas redondeadas */
+  margin-bottom: 18px;
+  background: none;      /* sin líneas ni degradado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.welcome-img-real {
+  width: 100%;      /* que ocupe todo el ancho */
+  height: auto;     /* y que el alto sea proporcional */
+  object-fit: cover;  /* o 'contain' si NO quieres que llegue a recortar nunca */
+  display: block;
+}
+
+
+        /* --------------------------
+       TEXTOS
+    ---------------------------*/
+        .welcome-title {
+            font-size: 1.36rem;
+            line-height: 1.22;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+       
+
+       
+
+        .welcome-brand {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            opacity: 0.9;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* --------------------------
+       BOTÓN PRINCIPAL
+    ---------------------------*/
+        .welcome-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 22px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, var(--rojo-santander), var(--rojo-oscuro));
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.98rem;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.55);
+            transition:
+                transform var(--duracion-transicion) var(--easing),
+                box-shadow var(--duracion-transicion) var(--easing),
+                filter var(--duracion-transicion) var(--easing);
+        }
+
+        .welcome-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 26px rgba(0, 0, 0, 0.7);
+            filter: brightness(1.03);
+        }
+
+        .welcome-button:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --------------------------
+       CAPA UI SOBRE CÁMARA
+    ---------------------------*/
+        .hint {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            align-self: center;
+            pointer-events: auto;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .scene {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --------------------------
+       ASSET CENTRAL + HOTSPOTS
+    ---------------------------*/
+        .asset-wrapper {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            margin: 0 auto 4px;
+        }
+
+        /* AHORA CADA BOTÓN ES SOLO SU SVG */
+        .asset-hotspot {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .hotspot-shape {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none;
+            transition:
+                transform var(--duracion-transicion) var(--easing),
+                filter var(--duracion-transicion) var(--easing);
+        }
+
+        .asset-hotspot:hover .hotspot-shape {
+            transform: scale(1.06);
+            filter: drop-shadow(0 0 14px rgba(236, 0, 0, 0.75));
+        }
+
+        .hs-danos-edificio {
+            top: -10%;
+            left: 25%;
+        }
+
+        .hs-robo-contenidos {
+            top: 13%;
+            left: 80%;
+        }
+
+        .hs-catas-troficas {
+            top: 35%;
+            left: 25%;
+        }
+
+        .hs-rc-familiar {
+            top: 60%;
+            left: 80%;
+        }
+
+        .hs-rc-domesticos {
+            top: 85%;
+            left: 25%;
+        }
+
+       /* --------------------------
+   CARD DE DETALLE (VERSIÓN COMPACTA)
+---------------------------*/
+.detail-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none;
+    z-index: 2;
+}
+
+.detail-card {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(65%, 250px);   /* MÁS DELGADO Y PEQUEÑO */
+    background: #ffffff;
+    color: #222;
+    border-radius: 16px;
+    padding: 12px 14px;       /* MENOS PADDING = MÁS COMPACTO */
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.45);
+    display: none;
+    z-index: 3;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.detail-title {
+    font-size: 0.92rem;       /* MÁS PEQUEÑO */
+    font-weight: 700;
+    color: #141414;
+}
+
+.detail-badge {
+    font-size: 0.70rem;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(236, 0, 0, 0.06);
+    color: var(--rojo-oscuro);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.detail-badge::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--rojo-santander);
+}
+
+.detail-close {
+    border: none;
+    background: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    line-height: 1;
+    color: #777;
+}
+
+.detail-close:hover {
+    color: #000;
+}
+
+.detail-layout {
+    position: relative;
+    display: block;
+    margin-top: 4px;
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-body {
+    font-size: 0.80rem;       /* TEXTO MÁS PEQUEÑO */
+    line-height: 1.45;
+    color: #333;
+}
+
+.detail-body p + p {
+    margin-top: 6px;
+}
+
+.detail-cta {
+    margin-top: 12px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.button-primary,
+.button-secondary {
+    flex: 1;
+    padding: 8px 10px;       /* BOTONES COMPACTOS */
+    border-radius: 999px;
+    border: none;
+    font-size: 0.78rem;       /* LETRA MÁS PEQUEÑA */
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button-primary {
+    background: linear-gradient(135deg, var(--rojo-santander), var(--rojo-oscuro));
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(236, 0, 0, 0.28);
+}
+
+.button-primary:hover {
+    transform: translateY(-1px);
+}
+
+.button-secondary {
+    background: #f3f4f7;
+    color: #1a2a4b;
+}
+
+.button-secondary:hover {
+    background: #e8ebf1;
+}
+
+/* Imagen flotante estilo BBVA */
+.detail-media {
+    position: absolute;
+    top: -110px;    /* AJUSTADO POR TAMAÑO DE CARD MÁS PEQUEÑO */
+    right: -40px;
+    pointer-events: none;
+}
+
+.detail-media img {
+    max-width: 120px;   /* IMAGEN MÁS PEQUEÑA */
+    max-height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+}
+
+        
+
+        /* Imagen tipo BBVA: pequeña, flotando arriba a la derecha */
+        .detail-media {
+            position: absolute;
+            top: -150px;
+            /* se sale un poco del card */
+            right: -58px;
+            /* misma posición que tenías */
+            pointer-events: none;
+        }
+
+        .detail-media img {
+            max-width: 140px;
+            max-height: 140px;
+            object-fit: contain;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.35));
+        }
+
+        @media (min-width: 600px) {
+            .welcome-card {
+                padding: 28px 26px 24px;
+            }
+        }
+
+        /* Imagen de casa debajo de los botones */
+        .asset-base-house {
+            position: absolute;
+            bottom: -170px;
+            /* Ajusta la altura de la casa */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            /* Ajusta el tamaño según tu casa */
+            pointer-events: none;
+            /* Para que no estorbe al tocar los botones */
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <video id="camera" autoplay playsinline></video>
+        <div class="camera-overlay" id="cameraOverlay"></div>
+
+        <!-- PANTALLA DE BIENVENIDA -->
+        <section class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-card">
+                <div class="welcome-image">
+                    <img src="mi-imagen-oficial.png" alt="Hogar Protegido Santander" class="welcome-img-real" />
+                </div>
+
+                <h1 class="welcome-title">Explora Hogar Protegido Santander</h1>
+               
+
+                <button class="welcome-button" id="startBtn">
+                    Comenzar experiencia
+                </button>
+
+                
+
+                <p class="welcome-brand">
+                    Hogar Protegido · Santander
+                </p>
+            </div>
+        </section>
+
+        <!-- UI SOBRE LA CÁMARA -->
+        <section class="ui-layer" id="uiLayer">
+            <div class="hint" id="hint">
+                Toca los íconos alrededor de tu hogar para descubrir las coberturas de Hogar Protegido ✨
+            </div>
+
+            <div class="scene">
+                <div class="asset-wrapper" id="assetWrapper" aria-label="Coberturas Hogar Protegido">
+
+
+                    <button class="asset-hotspot hs-danos-edificio" data-module="danosEdificio">
+                        <img src="mi-shape1.svg" alt="Daños al edificio" class="hotspot-shape" />
+                    </button>
+
+                    <button class="asset-hotspot hs-robo-contenidos" data-module="roboContenidos">
+                        <img src="mi-shape2.svg" alt="Robo a contenidos" class="hotspot-shape" />
+                    </button>
+
+                    <button class="asset-hotspot hs-catas-troficas" data-module="coberturasCatastroficas">
+                        <img src="mi-shape3.svg" alt="Coberturas catastróficas" class="hotspot-shape" />
+                    </button>
+
+                    <button class="asset-hotspot hs-rc-familiar" data-module="rcPrivadaFamiliar">
+                        <img src="mi-shape4.svg" alt="RC privada y familiar" class="hotspot-shape" />
+                    </button>
+
+                    <button class="asset-hotspot hs-rc-domesticos" data-module="rcTrabajadoresDomesticos">
+                        <img src="mi-shape5.svg" alt="RC trabajadores domésticos" class="hotspot-shape" />
+                    </button>
+
+                    <img src="mi-casa.svg" alt="Casa Hogar Protegido" class="asset-base-house" />
+                </div>
+            </div>
+        </section>
+
+        <div class="detail-backdrop" id="detailBackdrop"></div>
+
+        <article class="detail-card" id="detailCard">
+            <header class="detail-header">
+                <!-- X ahora a la izquierda -->
+                <button class="detail-close" id="closeDetail" aria-label="Cerrar detalle">×</button>
+                <div>
+                    <div class="detail-title" id="detailTitle"></div>
+                    <div class="detail-badge" id="detailBadge"></div>
+                </div>
+            </header>
+
+            <div class="detail-layout">
+                <div class="detail-content">
+                    <div class="detail-body" id="detailBody"></div>
+
+                    <div class="detail-cta">
+                        <button class="button-primary">Solicitar asesoría</button>
+                        <button class="button-secondary">Ver condiciones completas</button>
+                    </div>
+
+
+                </div>
+
+                <aside class="detail-media" id="detailMedia">
+                    <img id="detailIllustration" src="floating-default.png" alt="Ilustración cobertura" />
+                </aside>
+            </div>
+        </article>
+
+        <script>
+            const startBtn = document.getElementById('startBtn');
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const camera = document.getElementById('camera');
+            const cameraOverlay = document.getElementById('cameraOverlay');
+            const uiLayer = document.getElementById('uiLayer');
+            const assetWrapper = document.getElementById('assetWrapper');
+            const hint = document.getElementById('hint');
+            const detailCard = document.getElementById('detailCard');
+            const detailBackdrop = document.getElementById('detailBackdrop');
+            const detailTitle = document.getElementById('detailTitle');
+            const detailBadge = document.getElementById('detailBadge');
+            const detailBody = document.getElementById('detailBody');
+            const closeDetail = document.getElementById('closeDetail');
+            const detailIllustration = document.getElementById('detailIllustration');
+
+            const modules = {
+                danosEdificio: {
+                    title: 'Daños al edificio',
+                    badge: 'Protección de la construcción',
+                    body: `
+            <p>Cubre daños materiales a la construcción de tu vivienda ocasionados por riesgos contemplados en la póliza, como incendio, explosión y otros eventos especificados.</p>
+            <p>Te ayuda a reparar o reconstruir tu hogar para que puedas volver a habitarlo lo antes posible, de acuerdo con las sumas aseguradas contratadas.</p>
+          `,
+                    floatImg: 'floating-danos.svg'
+                },
+                roboContenidos: {
+                    title: 'Robo a contenidos',
+                    badge: 'Protección de tus pertenencias',
+                    body: `
+            <p>Protege los bienes contenidos dentro de tu vivienda, como muebles, electrodomésticos y otros objetos personales, frente a robo con violencia o asalto al interior del hogar.</p>
+            <p>La indemnización se realiza conforme a las sumas aseguradas, deducibles y condiciones establecidas en la póliza de Hogar Protegido.</p>
+          `,
+                    floatImg: 'floating-robo.svg'
+                },
+                coberturasCatastroficas: {
+                    title: 'Coberturas catastróficas',
+                    badge: 'Eventos de alto impacto',
+                    body: `
+            <p>Ofrece protección frente a ciertos eventos de carácter catastrófico definidos en la póliza, como algunos fenómenos de la naturaleza u otros riesgos de gran magnitud.</p>
+            <p>Te ayuda a afrontar los costos derivados de daños severos en tu vivienda, conforme a las sumas aseguradas, deducibles y condiciones contratadas.</p>
+          `,
+                    floatImg: 'floating-catastrofes.svg'
+                },
+                rcPrivadaFamiliar: {
+                    title: 'Responsabilidad civil privada y familiar',
+                    badge: 'Protección frente a terceros',
+                    body: `
+            <p>Te ampara cuando, por actos de tu vida privada, tú o los integrantes de tu familia causan daños a terceros y legalmente deban responder.</p>
+            <p>Puede incluir daños a la propiedad de terceros y lesiones personales derivadas de hechos cubiertos, según lo señalado en la póliza.</p>
+          `,
+                    floatImg: 'floating-rc-familiar.svg'
+                },
+                rcTrabajadoresDomesticos: {
+                    title: 'Responsabilidad civil trabajadores domésticos',
+                    badge: 'Apoyo en tu hogar',
+                    body: `
+            <p>Brinda protección cuando los trabajadores domésticos que prestan servicios en tu casa ocasionan daños a terceros en el ejercicio de sus funciones y exista responsabilidad legal.</p>
+            <p>La cobertura se otorga en los términos, condiciones, límites y exclusiones establecidos en la póliza de Hogar Protegido.</p>
+          `,
+                    floatImg: 'floating-domesticos.svg'
+                }
+            };
+
+            startBtn.addEventListener('click', async () => {
+                welcomeScreen.style.display = 'none';
+                camera.style.display = 'block';
+                cameraOverlay.style.display = 'block';
+                uiLayer.style.display = 'flex';
+
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'environment' }
+                    });
+                    camera.srcObject = stream;
+                } catch (err) {
+                    console.error('Error al acceder a la cámara', err);
+                    camera.style.background = '#111';
+                }
+            });
+
+            assetWrapper.addEventListener('click', () => {
+                hint.textContent = 'Toca cada ícono para conocer las coberturas de Hogar Protegido';
+            });
+
+            assetWrapper.addEventListener('click', (e) => {
+                const hotspot = e.target.closest('.asset-hotspot');
+                if (!hotspot) return;
+
+                const moduleKey = hotspot.dataset.module;
+                const data = modules[moduleKey];
+                if (!data) return;
+
+                detailTitle.textContent = data.title;
+                detailBadge.textContent = data.badge;
+                detailBody.innerHTML = data.body;
+
+                if (data.floatImg) {
+                    detailIllustration.src = data.floatImg;
+                }
+
+                detailCard.style.display = 'block';
+                detailBackdrop.style.display = 'block';
+            });
+
+            const closeDetailHandler = () => {
+                detailCard.style.display = 'none';
+                detailBackdrop.style.display = 'none';
+            };
+
+            closeDetail.addEventListener('click', closeDetailHandler);
+            detailBackdrop.addEventListener('click', closeDetailHandler);
+        </script>
+    </div>
+</body>
+
+</html>
