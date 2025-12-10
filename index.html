@@ -62,13 +62,13 @@
         .camera-overlay {
             position: absolute;
             inset: 0;
-            background:
-                radial-gradient(circle at top, rgba(236, 0, 0, 0.35), transparent 55%),
-                linear-gradient(to top, rgba(0, 0, 0, 0.78), transparent 45%);
+            background: none !important;
+            /* ← Sin rojo, sin degradado */
             pointer-events: none;
             display: none;
             z-index: 1;
         }
+
 
         /* --------------------------
        CONTENEDORES PRINCIPALES
@@ -135,25 +135,30 @@
        IMAGEN DE BIENVENIDA
     ---------------------------*/
         .welcome-image {
-  width: 100%;
-  /* QUITA la altura fija */
-  /* height: 140px; */
-  border-radius: 18px;
-  overflow: hidden;      /* esto sí lo dejamos para las esquinas redondeadas */
-  margin-bottom: 18px;
-  background: none;      /* sin líneas ni degradado */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+            width: 100%;
+            /* QUITA la altura fija */
+            /* height: 140px; */
+            border-radius: 18px;
+            overflow: hidden;
+            /* esto sí lo dejamos para las esquinas redondeadas */
+            margin-bottom: 18px;
+            background: none;
+            /* sin líneas ni degradado */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
 
-.welcome-img-real {
-  width: 100%;      /* que ocupe todo el ancho */
-  height: auto;     /* y que el alto sea proporcional */
-  object-fit: cover;  /* o 'contain' si NO quieres que llegue a recortar nunca */
-  display: block;
-}
+        .welcome-img-real {
+            width: 100%;
+            /* que ocupe todo el ancho */
+            height: auto;
+            /* y que el alto sea proporcional */
+            object-fit: cover;
+            /* o 'contain' si NO quieres que llegue a recortar nunca */
+            display: block;
+        }
 
 
         /* --------------------------
@@ -166,9 +171,9 @@
             margin-bottom: 8px;
         }
 
-       
 
-       
+
+
 
         .welcome-brand {
             margin-top: 8px;
@@ -304,156 +309,164 @@
             left: 25%;
         }
 
-       /* --------------------------
+        /* --------------------------
    CARD DE DETALLE (VERSIÓN COMPACTA)
 ---------------------------*/
-.detail-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    display: none;
-    z-index: 2;
-}
+        .detail-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: none;
+            z-index: 2;
+        }
 
-.detail-card {
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: min(65%, 250px);   /* MÁS DELGADO Y PEQUEÑO */
-    background: #ffffff;
-    color: #222;
-    border-radius: 16px;
-    padding: 12px 14px;       /* MENOS PADDING = MÁS COMPACTO */
-    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.45);
-    display: none;
-    z-index: 3;
-}
+        .detail-card {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: min(65%, 250px);
+            /* MÁS DELGADO Y PEQUEÑO */
+            background: #ffffff;
+            color: #222;
+            border-radius: 16px;
+            padding: 12px 14px;
+            /* MENOS PADDING = MÁS COMPACTO */
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.45);
+            display: none;
+            z-index: 3;
+        }
 
-.detail-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 8px;
-    margin-bottom: 8px;
-}
+        .detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
 
-.detail-title {
-    font-size: 0.92rem;       /* MÁS PEQUEÑO */
-    font-weight: 700;
-    color: #141414;
-}
+        .detail-title {
+            font-size: 0.92rem;
+            /* MÁS PEQUEÑO */
+            font-weight: 700;
+            color: #141414;
+        }
 
-.detail-badge {
-    font-size: 0.70rem;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: rgba(236, 0, 0, 0.06);
-    color: var(--rojo-oscuro);
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
+        .detail-badge {
+            font-size: 0.70rem;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(236, 0, 0, 0.06);
+            color: var(--rojo-oscuro);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
 
-.detail-badge::before {
-    content: "";
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--rojo-santander);
-}
+        .detail-badge::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--rojo-santander);
+        }
 
-.detail-close {
-    border: none;
-    background: none;
-    font-size: 1.1rem;
-    cursor: pointer;
-    padding: 2px 4px;
-    line-height: 1;
-    color: #777;
-}
+        .detail-close {
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 2px 4px;
+            line-height: 1;
+            color: #777;
+        }
 
-.detail-close:hover {
-    color: #000;
-}
+        .detail-close:hover {
+            color: #000;
+        }
 
-.detail-layout {
-    position: relative;
-    display: block;
-    margin-top: 4px;
-}
+        .detail-layout {
+            position: relative;
+            display: block;
+            margin-top: 4px;
+        }
 
-.detail-content {
-    display: flex;
-    flex-direction: column;
-}
+        .detail-content {
+            display: flex;
+            flex-direction: column;
+        }
 
-.detail-body {
-    font-size: 0.80rem;       /* TEXTO MÁS PEQUEÑO */
-    line-height: 1.45;
-    color: #333;
-}
+        .detail-body {
+            font-size: 0.80rem;
+            /* TEXTO MÁS PEQUEÑO */
+            line-height: 1.45;
+            color: #333;
+        }
 
-.detail-body p + p {
-    margin-top: 6px;
-}
+        .detail-body p+p {
+            margin-top: 6px;
+        }
 
-.detail-cta {
-    margin-top: 12px;
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
+        .detail-cta {
+            margin-top: 12px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
 
-.button-primary,
-.button-secondary {
-    flex: 1;
-    padding: 8px 10px;       /* BOTONES COMPACTOS */
-    border-radius: 999px;
-    border: none;
-    font-size: 0.78rem;       /* LETRA MÁS PEQUEÑA */
-    font-weight: 600;
-    cursor: pointer;
-}
+        .button-primary,
+        .button-secondary {
+            flex: 1;
+            padding: 8px 10px;
+            /* BOTONES COMPACTOS */
+            border-radius: 999px;
+            border: none;
+            font-size: 0.78rem;
+            /* LETRA MÁS PEQUEÑA */
+            font-weight: 600;
+            cursor: pointer;
+        }
 
-.button-primary {
-    background: linear-gradient(135deg, var(--rojo-santander), var(--rojo-oscuro));
-    color: #fff;
-    box-shadow: 0 6px 14px rgba(236, 0, 0, 0.28);
-}
+        .button-primary {
+            background: linear-gradient(135deg, var(--rojo-santander), var(--rojo-oscuro));
+            color: #fff;
+            box-shadow: 0 6px 14px rgba(236, 0, 0, 0.28);
+        }
 
-.button-primary:hover {
-    transform: translateY(-1px);
-}
+        .button-primary:hover {
+            transform: translateY(-1px);
+        }
 
-.button-secondary {
-    background: #f3f4f7;
-    color: #1a2a4b;
-}
+        .button-secondary {
+            background: #f3f4f7;
+            color: #1a2a4b;
+        }
 
-.button-secondary:hover {
-    background: #e8ebf1;
-}
+        .button-secondary:hover {
+            background: #e8ebf1;
+        }
 
-/* Imagen flotante estilo BBVA */
-.detail-media {
-    position: absolute;
-    top: -110px;    /* AJUSTADO POR TAMAÑO DE CARD MÁS PEQUEÑO */
-    right: -40px;
-    pointer-events: none;
-}
+        /* Imagen flotante estilo BBVA */
+        .detail-media {
+            position: absolute;
+            top: -110px;
+            /* AJUSTADO POR TAMAÑO DE CARD MÁS PEQUEÑO */
+            right: -40px;
+            pointer-events: none;
+        }
 
-.detail-media img {
-    max-width: 120px;   /* IMAGEN MÁS PEQUEÑA */
-    max-height: 120px;
-    object-fit: contain;
-    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
-}
+        .detail-media img {
+            max-width: 120px;
+            /* IMAGEN MÁS PEQUEÑA */
+            max-height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+        }
 
-        
+
 
         /* Imagen tipo BBVA: pequeña, flotando arriba a la derecha */
         .detail-media {
@@ -507,13 +520,13 @@
                 </div>
 
                 <h1 class="welcome-title">Explora Hogar Protegido Santander</h1>
-               
+
 
                 <button class="welcome-button" id="startBtn">
                     Comenzar experiencia
                 </button>
 
-                
+
 
                 <p class="welcome-brand">
                     Hogar Protegido · Santander
